@@ -1,0 +1,27 @@
+{
+  "name": "telegram-bot-schedule-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Palidos/Telegram-bot-schedule-parser.git"
+  },
+  "author": "Palidos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Palidos/Telegram-bot-schedule-parser/issues"
+  },
+  "homepage": "https://github.com/Palidos/Telegram-bot-schedule-parser#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.1.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "telegraf": "^3.32.0"
+  }
+}
