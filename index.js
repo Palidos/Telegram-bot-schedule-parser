@@ -1,26 +1,28 @@
-const rp = require("request-promise");
-const $ = require("cheerio");
+const cheerio = require("cheerio");
 const Telegraf = require("telegraf");
+const axios = require("axios");
 require("dotenv").config();
 
 const url =
   "http://www.itmm.unn.ru/studentam/raspisanie/raspisanie-bakalavriata-i-spetsialiteta-ochnoj-formy-obucheniya/";
 
 function getScheduleInfo() {
-  return Promise.resolve(rp(url))
-    .then(html => {
+  return Promise.resolve(axios.get(url))
+    .then(res => {
+      const $ = cheerio.load(res.data);
       return {
-        date: $(".pagetext > div > p", html)
+        date: $(".pagetext > div > p")
           .contents()
           .last()
           .text(),
-        link: $(".pagetext > div > p > a", html)[3].attribs.href
+        link: $(".pagetext > div > p > a")[3].attribs.href
       };
     })
     .catch(err => {
-      if (err) console.log(err);
+      console.log(err);
     });
 }
+
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 console.log("Bot is running!!!");
