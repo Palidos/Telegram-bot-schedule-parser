@@ -1,9 +1,0 @@
-{
-  "name": "itmm-schedule-bot",
-  "version": 1,
-  "build": {
-    "env": {
-      "BOT_TOKEN": "@bot_token"
-    }
-  }
-}

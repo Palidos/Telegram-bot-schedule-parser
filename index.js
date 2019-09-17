@@ -3,15 +3,13 @@ const Telegraf = require("telegraf");
 const axios = require("axios");
 require("dotenv").config();
 const express = require('express');
-// const app = express();
+const port = process.env.PORT || 5000
+const app = express();
+app.listen(port, () => console.log(`Server started on port ${port}`));
 
-// const port = process.env.PORT || 5000
-// app.listen(port, () => console.log(`Server started on port ${port}`));
-
-
-// app.get('/', (req, res) => {
-//   res.send('<h1>HELLO</h1>');
-// });
+app.get('/', (req, res) => {
+  res.send('<h1>HELLO</h1>');
+});
 
 const url =
   "http://www.itmm.unn.ru/studentam/raspisanie/raspisanie-bakalavriata-i-spetsialiteta-ochnoj-formy-obucheniya/";
@@ -59,4 +57,3 @@ getScheduleInfo().then(info => {
 });
 
 bot.launch();
-
