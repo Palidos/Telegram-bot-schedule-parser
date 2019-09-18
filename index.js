@@ -2,33 +2,36 @@ const cheerio = require("cheerio");
 const Telegraf = require("telegraf");
 const axios = require("axios");
 require("dotenv").config();
-const express = require('express');
-const port = process.env.PORT || 5000
+const express = require("express");
+const port = process.env.PORT || 5000;
 const app = express();
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
-app.get('/', (req, res) => {
-  res.send('<h1>HELLO</h1>');
+app.get("/", (req, res) => {
+  res.send("<h1>HELLO</h1>");
 });
+
+setInterval(() => {
+  app.get("https://ancient-caverns-68428.herokuapp.com");
+}, 1800000);
 
 const url =
   "http://www.itmm.unn.ru/studentam/raspisanie/raspisanie-bakalavriata-i-spetsialiteta-ochnoj-formy-obucheniya/";
 
-function getScheduleInfo() {
-  return Promise.resolve(axios.get(url))
-    .then(res => {
-      const $ = cheerio.load(res.data);
-      return {
-        date: $(".pagetext > div > p")
-          .contents()
-          .last()
-          .text(),
-        link: $(".pagetext > div > p > a")[3].attribs.href
-      };
-    })
-    .catch(err => {
-      console.log(err);
-    });
+async function getScheduleInfo() {
+  try {
+    const res = await axios.get(url);
+    const $ = cheerio.load(res.data);
+    return {
+      date: $(".pagetext > div > p")
+        .contents()
+        .last()
+        .text(),
+      link: $(".pagetext > div > p > a")[3].attribs.href
+    };
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -41,7 +44,8 @@ bot.command("help", ({ reply }) =>
   reply('Use "/schedule" for fresh ITMM schedule')
 );
 
-getScheduleInfo().then(info => {
+(async () => {
+  let info = await getScheduleInfo();
   bot.command("schedule", ctx => {
     ctx.reply(info.date);
     const nameSplit = info.link.split("/");
@@ -54,6 +58,6 @@ getScheduleInfo().then(info => {
         if (err) console.log(err);
       });
   });
-});
+})();
 
 bot.launch();
