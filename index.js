@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const Telegraf = require("telegraf");
 const axios = require("axios");
+const http = require("http");
 require("dotenv").config();
 const express = require("express");
 const port = process.env.PORT || 5000;
@@ -14,7 +15,7 @@ app.get("/", (req, res) => {
 // let currTime = new Date();
 // if (currTime.getHours() >= 7 && currTime.getHours() <= 17) {
 setInterval(() => {
-  app.get("https://ancient-caverns-68428.herokuapp.com");
+  http.get("https://ancient-caverns-68428.herokuapp.com");
 }, 1740000);
 // }
 
