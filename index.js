@@ -11,12 +11,12 @@ app.get("/", (req, res) => {
   res.send("<h1>HELLO</h1>");
 });
 
-let currTime = new Date();
-if (currTime.getHours() >= 7 && currTime.getHours() <= 17) {
-  setInterval(() => {
-    app.get("https://ancient-caverns-68428.herokuapp.com");
-  }, 1740000);
-}
+// let currTime = new Date();
+// if (currTime.getHours() >= 7 && currTime.getHours() <= 17) {
+setInterval(() => {
+  app.get("https://ancient-caverns-68428.herokuapp.com");
+}, 1740000);
+// }
 
 const url =
   "http://www.itmm.unn.ru/studentam/raspisanie/raspisanie-bakalavriata-i-spetsialiteta-ochnoj-formy-obucheniya/";
