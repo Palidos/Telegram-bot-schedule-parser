@@ -15,7 +15,7 @@ let currTime = new Date();
 if (currTime.getHours() >= 7 && currTime.getHours() <= 17) {
   setInterval(() => {
     app.get("https://ancient-caverns-68428.herokuapp.com");
-  }, 1800000);
+  }, 1740000);
 }
 
 const url =
