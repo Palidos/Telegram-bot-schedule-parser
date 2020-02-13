@@ -8,6 +8,8 @@ const port = process.env.PORT || 5000;
 const app = express();
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
+let lastScheduleFileName = null;
+
 app.get("/", (req, res) => {
   res.send("<h1>HELLO</h1>");
 });
@@ -16,7 +18,7 @@ let currTime = new Date();
 if (currTime.getHours() >= 7 && currTime.getHours() <= 17) {
   setInterval(() => {
     http.get("https://ancient-caverns-68428.herokuapp.com");
-  }, 1740000);
+  }, 100000);
 }
 
 const url =
@@ -37,8 +39,25 @@ async function getScheduleInfo() {
     console.log(err);
   }
 }
-
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+setInterval(() => {
+  let info = await getScheduleInfo();
+  bot.telegram.sendMessage(process.env.CHAT_ID, info.date);
+  const filename = info.link.split("/").pop();
+  if (filename !== lastScheduleFileName) {
+    lastScheduleFileName = filename;
+    bot.telegram.sendDocument(process.env.CHAT_ID, {
+      url: info.link,
+      filename,
+    })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+}, 100000);
+
+
 console.log("Bot is running!!!");
 bot.start(ctx => ctx.reply("Hello \nFuck you :)"));
 bot.help(ctx => ctx.reply('Use "/schedule" for fresh ITMM schedule'));
@@ -52,14 +71,14 @@ bot.command("help", ({ reply }) =>
   let info = await getScheduleInfo();
   bot.command("schedule", ctx => {
     ctx.reply(info.date);
-    const nameSplit = info.link.split("/");
+    const filename = info.link.split("/").pop();
     ctx.telegram
       .sendDocument(ctx.from.id, {
         url: info.link,
-        filename: nameSplit[nameSplit.length - 1]
+        filename,
       })
       .catch(err => {
-        if (err) console.log(err);
+        console.log(err);
       });
   });
 })();
