@@ -41,7 +41,7 @@ async function getScheduleInfo() {
 }
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-setInterval(() => {
+setInterval(async() => {
   let info = await getScheduleInfo();
   bot.telegram.sendMessage(process.env.CHAT_ID, info.date);
   const filename = info.link.split("/").pop();
